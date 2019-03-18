@@ -1,17 +1,16 @@
 package main
 
 import (
-  //  "fmt"
     "encoding/json"
     "github.com/gorilla/mux"
     "log"
     "net/http"
-    "github.com/go-redis/redis"
+    "github.com/gomodule/redigo/redis"
+    "fmt"
 )
 
 
 type Job struct{
-  JID string `json:jid,omitempty`
   Title string  `json:"title,omitempty"`
   Short_desc string `json:"shortdesc,omitempty"`
   Coordinates *Coordinates `json:"coordinates,omitempty"`
@@ -31,18 +30,23 @@ type Coordinates struct{
   Longtitude string `json:longtitude,omitempty`
 }
 
-var alljobs []Job
 
 
 func GetAllJobs(w http.ResponseWriter, r *http.Request) {
-    json.NewEncoder(w).Encode(alljobs)
-//    client := RedisCon()
-//    pong, err := client.Ping().Result()
-//    fmt.Println(pong, err)
+	pool := getRedisPool()
+	con := pool.Get()
+	defer con.Close()
+	s, err := GetFromRedis(con, "JOB")
+	if err != nil{
+		panic(err.Error())
+	}
+	joblist := Job{}
+	err = json.Unmarshal([]byte(s), &joblist)
+	json.NewEncoder(w).Encode(joblist)
 }
 
 
-func GetJob(w http.ResponseWriter, r *http.Request) {
+/*func GetJob(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     for _, item := range alljobs{
         if item.JID == params["jid"] {
@@ -51,20 +55,20 @@ func GetJob(w http.ResponseWriter, r *http.Request) {
         }
     }
     json.NewEncoder(w).Encode(&Job{})
-}
+}*/
 
 
 func AddJob(w http.ResponseWriter, r *http.Request) {
-    params := mux.Vars(r)
-    var job Job
-    _ = json.NewDecoder(r.Body).Decode(&job)
-    job.JID = params["jid"]
-    alljobs = append(alljobs, job)
-    json.NewEncoder(w).Encode(alljobs)
+	pool := getRedisPool()
+	con := pool.Get()
+	defer con.Close()
+	var job Job
+	_ = json.NewDecoder(r.Body).Decode(&job)
+	SaveToRedis(con, job)
 }
 
 
-func RemoveJob(w http.ResponseWriter, r *http.Request) {
+/*func RemoveJob(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     for index, item := range alljobs {
         if item.JID == params["jid"] {
@@ -73,23 +77,61 @@ func RemoveJob(w http.ResponseWriter, r *http.Request) {
         }
         json.NewEncoder(w).Encode(alljobs)
     }
+}*/
+
+// Redis related functions begin.
+
+func getRedisPool() *redis.Pool{
+	return &redis.Pool{
+		// Max number of idle connections in the pool.
+		MaxIdle: 80,
+		// Max number of connections.
+		MaxActive: 12000,
+		// Config a connection.
+		Dial: func() (redis.Conn, error){
+			c, err := redis.Dial("tcp", ":6379")
+			if err != nil{
+				panic(err.Error())
+			}
+			return c, err
+		},
+
+	}
 }
 
-func RedisCon() *redis.Client{
-	client := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
-		Password: "",
-		DB:	0,
-	})
-	return client
+func SaveToRedis(con redis.Conn, job Job) error{
+	const prefix string = "JOB"
+	jsonstr, err := json.Marshal(job)
+	if err != nil {
+		return err
+	}
+
+	// SET
+	_, err = con.Do("JSON.SET", prefix, ".", jsonstr)
+	if err != nil {
+		return err
+	}
+	return nil
 }
+
+func GetFromRedis(con redis.Conn, key string) (string, error){
+	s, err := redis.String(con.Do("JSON.GET", key))
+	if err == redis.ErrNil{
+		fmt.Println("Key doesn't exist!")
+	} else if err != nil{
+		return s, err
+	}
+	return s, nil
+}
+
+// Redis related functions ends.
+
 
 func main() {
     router := mux.NewRouter()
-//    alljobs = append(alljobs, Job{JID: "1", Title: "John", Short_desc: "Doe", Coordinates: &Coordinates{Latitude: "0.1234", Longtitude: "0.5678"}, Contact: "janith@tuta.io", MetaData:&JobMeta{Added_date:"11", Added_user:"Jan", Modified_date:"11", Views:"5"}})
     router.HandleFunc("/jobs", GetAllJobs).Methods("GET")
-    router.HandleFunc("/jobs/{id}", GetJob).Methods("GET")
+ //   router.HandleFunc("/jobs/{id}", GetJob).Methods("GET")
     router.HandleFunc("/jobs/add", AddJob).Methods("POST")
-    router.HandleFunc("/jobs/{id}", RemoveJob).Methods("DELETE")
+  //  router.HandleFunc("/jobs/{id}", RemoveJob).Methods("DELETE")
     log.Fatal(http.ListenAndServe(":8080", router))
 }
