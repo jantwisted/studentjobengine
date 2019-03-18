@@ -1,0 +1,16 @@
+{
+   "JID":"1",
+   "Title":"John",
+   "Short_desc":"Doe",
+   "Coordinates":{
+      "Latitude":"0.1234",
+      "Longtitude":"0.5678"
+   },
+   "Contact":"janith@tuta.io",
+   "MetaData":{
+      "Added_date":"11",
+      "Added_user":"Jan",
+      "Modified_date":"11",
+      "Views":"5"
+   }
+}
