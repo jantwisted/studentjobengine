@@ -7,6 +7,7 @@ import (
     "net/http"
     "github.com/gomodule/redigo/redis"
     "fmt"
+    "strconv"
 )
 
 
@@ -31,7 +32,6 @@ type Coordinates struct{
 }
 
 
-
 func GetAllJobs(w http.ResponseWriter, r *http.Request) {
 	pool := getRedisPool()
 	con := pool.Get()
@@ -45,39 +45,18 @@ func GetAllJobs(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(joblist)
 }
 
-
-/*func GetJob(w http.ResponseWriter, r *http.Request) {
-    params := mux.Vars(r)
-    for _, item := range alljobs{
-        if item.JID == params["jid"] {
-            json.NewEncoder(w).Encode(item)
-            return
-        }
-    }
-    json.NewEncoder(w).Encode(&Job{})
-}*/
-
-
 func AddJob(w http.ResponseWriter, r *http.Request) {
 	pool := getRedisPool()
 	con := pool.Get()
 	defer con.Close()
 	var job Job
 	_ = json.NewDecoder(r.Body).Decode(&job)
-	SaveToRedis(con, job)
+	index, err := SeqNextVal(con, "jobseq")
+	if err != nil {
+		fmt.Println("sequence error!")
+	}
+	SaveToRedis(con, job, index)
 }
-
-
-/*func RemoveJob(w http.ResponseWriter, r *http.Request) {
-    params := mux.Vars(r)
-    for index, item := range alljobs {
-        if item.JID == params["jid"] {
-            alljobs = append(alljobs[:index], alljobs[index+1:]...)
-            break
-        }
-        json.NewEncoder(w).Encode(alljobs)
-    }
-}*/
 
 // Redis related functions begin.
 
@@ -99,15 +78,13 @@ func getRedisPool() *redis.Pool{
 	}
 }
 
-func SaveToRedis(con redis.Conn, job Job) error{
+func SaveToRedis(con redis.Conn, job Job, index uint32) error{
 	const prefix string = "JOB"
 	jsonstr, err := json.Marshal(job)
 	if err != nil {
 		return err
 	}
-
-	// SET
-	_, err = con.Do("JSON.SET", prefix, ".", jsonstr)
+	_, err = con.Do("JSON.SET", prefix+strconv.FormatUint(uint64(index), 10), ".", jsonstr)
 	if err != nil {
 		return err
 	}
@@ -124,14 +101,34 @@ func GetFromRedis(con redis.Conn, key string) (string, error){
 	return s, nil
 }
 
+func SeqNextVal(con redis.Conn, key string)(uint32, error){
+	seqval, err := redis.String(con.Do("GET", key))
+	if err == redis.ErrNil{
+		_, err = con.Do("SET", key, 0)
+		if err != nil{
+			return 0, err
+		}
+		seqval, err = redis.String(con.Do("GET", key))
+	} else if err != nil{
+		return 0,  err
+	}
+	seqvalu32, err := strconv.ParseUint(seqval, 10, 32)
+	if err != nil{
+		fmt.Println(err)
+	}
+	_, err = con.Do("SET", key, uint32(seqvalu32)+1)
+	if err != nil{
+		return 0, err
+	}
+	return uint32(seqvalu32), nil
+}
+
 // Redis related functions ends.
 
 
 func main() {
     router := mux.NewRouter()
     router.HandleFunc("/jobs", GetAllJobs).Methods("GET")
- //   router.HandleFunc("/jobs/{id}", GetJob).Methods("GET")
     router.HandleFunc("/jobs/add", AddJob).Methods("POST")
-  //  router.HandleFunc("/jobs/{id}", RemoveJob).Methods("DELETE")
     log.Fatal(http.ListenAndServe(":8080", router))
 }
