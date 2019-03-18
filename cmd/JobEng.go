@@ -1,10 +1,12 @@
 package main
 
 import (
+  //  "fmt"
     "encoding/json"
     "github.com/gorilla/mux"
     "log"
     "net/http"
+    "github.com/go-redis/redis"
 )
 
 
@@ -34,6 +36,9 @@ var alljobs []Job
 
 func GetAllJobs(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(alljobs)
+//    client := RedisCon()
+//    pong, err := client.Ping().Result()
+//    fmt.Println(pong, err)
 }
 
 
@@ -70,13 +75,21 @@ func RemoveJob(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func RedisCon() *redis.Client{
+	client := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+		Password: "",
+		DB:	0,
+	})
+	return client
+}
 
 func main() {
     router := mux.NewRouter()
-    alljobs = append(alljobs, Job{JID: "1", Title: "John", Short_desc: "Doe", Coordinates: &Coordinates{Latitude: "0.1234", Longtitude: "0.5678"}, Contact: "janith@tuta.io", MetaData:&JobMeta{Added_date:"11", Added_user:"Jan", Modified_date:"11", Views:"5"}})
+//    alljobs = append(alljobs, Job{JID: "1", Title: "John", Short_desc: "Doe", Coordinates: &Coordinates{Latitude: "0.1234", Longtitude: "0.5678"}, Contact: "janith@tuta.io", MetaData:&JobMeta{Added_date:"11", Added_user:"Jan", Modified_date:"11", Views:"5"}})
     router.HandleFunc("/jobs", GetAllJobs).Methods("GET")
     router.HandleFunc("/jobs/{id}", GetJob).Methods("GET")
-    router.HandleFunc("/jobs/{id}", AddJob).Methods("POST")
+    router.HandleFunc("/jobs/add", AddJob).Methods("POST")
     router.HandleFunc("/jobs/{id}", RemoveJob).Methods("DELETE")
     log.Fatal(http.ListenAndServe(":8080", router))
 }
