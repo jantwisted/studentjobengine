@@ -2,12 +2,17 @@ package main
 
 import (
 	
-	"github.com/jantwisted/studentjobengine/cmd"
+//	"./cmd"
+    	"github.com/gorilla/mux"
+       	"log"
+	"net/http"
+	"./ops"
 )
 
 func main() {
-
-    
-    cmd.Execute()
-	
+    //cmd.Execute()
+    router := mux.NewRouter()
+    router.HandleFunc("/jobs", ops.GetAllJobs).Methods("GET")
+    router.HandleFunc("/jobs/add", ops.AddJob).Methods("POST")
+    log.Fatal(http.ListenAndServe(":8080", router))
 }
