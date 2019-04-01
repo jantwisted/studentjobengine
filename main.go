@@ -1,12 +1,11 @@
 package main
 
 import (
-	
 //	"./cmd"
-    	"github.com/gorilla/mux"
-       	"log"
+	"github.com/gorilla/mux"
+	"log"
 	"net/http"
-	"github.com/jantwisted/studentjobengine/ops"
+	"./ops"
 )
 
 func main() {

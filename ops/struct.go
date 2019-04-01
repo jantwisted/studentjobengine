@@ -1,5 +1,12 @@
 package ops
 
+type JobStack struct{
+	Id string `json:"id,omitempty"`
+	Info *Job `json:"info,omitempty"`
+}
+
+type JobStackArray []JobStack
+
 type Job struct{
   Title string  `json:"title,omitempty"`
   Short_desc string `json:"shortdesc,omitempty"`

@@ -39,14 +39,32 @@ func SaveToRedis(con redis.Conn, job Job, index uint32) error{
 	return nil
 }
 
-func GetFromRedis(con redis.Conn, key string) (string, error){
-	s, err := redis.String(con.Do("JSON.GET", key))
-	if err == redis.ErrNil{
-		fmt.Println("Key doesn't exist!")
-	} else if err != nil{
-		return s, err
+func GetKeys(con redis.Conn, pattern string) ([]string, error){
+	iter := 0
+	keys := []string{}
+	for {
+		arr, err := redis.Values(con.Do("SCAN", iter, "MATCH", pattern))
+		if err != nil{
+			return keys, fmt.Errorf("error retrieving '%s' keys", pattern)
+		}
+
+		iter, _ = redis.Int(arr[0], nil)
+		k, _ := redis.Strings(arr[1], nil)
+		keys = append(keys, k...)
+
+		if iter == 0{
+			break
+		}
 	}
-	return s, nil
+	return keys, nil
+}
+
+func GetJsonValue(con redis.Conn, key string)(string, error){
+	json_content, err := redis.String(con.Do("JSON.GET", key))
+	if err != nil{
+		return json_content, err
+	}
+	return json_content, err
 }
 
 func SeqNextVal(con redis.Conn, key string)(uint32, error){
