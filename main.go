@@ -5,7 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"./ops"
+	"github.com/jantwisted/studentjobengine/ops"
 )
 
 func main() {
