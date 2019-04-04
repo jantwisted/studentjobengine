@@ -68,23 +68,16 @@ func GetJsonValue(con redis.Conn, key string)(string, error){
 }
 
 func SeqNextVal(con redis.Conn, key string)(uint32, error){
-	seqval, err := redis.String(con.Do("GET", key))
-	if err == redis.ErrNil{
+	var seqval string
+	is_seq_exist, err := redis.String(con.Do("EXIST", key))
+	if is_seq_exist == "0" {
 		_, err = con.Do("SET", key, 0)
 		if err != nil{
-			return 0, err
+			return 6, err
 		}
-		seqval, err = redis.String(con.Do("GET", key))
-	} else if err != nil{
-		return 0,  err
 	}
+	seqval, err = redis.String(con.Do("INCR", key))
+	seqval, err = redis.String(con.Do("GET", key))
 	seqvalu32, err := strconv.ParseUint(seqval, 10, 32)
-	if err != nil{
-		fmt.Println(err)
-	}
-	_, err = con.Do("SET", key, uint32(seqvalu32)+1)
-	if err != nil{
-		return 0, err
-	}
 	return uint32(seqvalu32), nil
 }
