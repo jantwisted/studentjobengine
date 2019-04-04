@@ -26,9 +26,8 @@ func getRedisPool() *redis.Pool{
 	}
 }
 
-func SaveToRedis(con redis.Conn, job Job, index uint32) error{
-	const prefix string = "JOB"
-	jsonstr, err := json.Marshal(job)
+func SaveToRedis(con redis.Conn, arg interface{}, prefix string, index uint32) error{
+	jsonstr, err := json.Marshal(arg)
 	if err != nil {
 		return err
 	}

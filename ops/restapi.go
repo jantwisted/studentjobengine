@@ -36,6 +36,7 @@ func AppendToJobStackArray(jobstackstr string, job_array JobStackArray)(JobStack
 }
 
 func AddJob(w http.ResponseWriter, r *http.Request) {
+	const prefix string = "JOB"
 	pool := getRedisPool()
 	con := pool.Get()
 	defer con.Close()
@@ -43,15 +44,17 @@ func AddJob(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&job)
 	index, err := SeqNextVal(con, "jobseq")
 	LogError(err)
-	SaveToRedis(con, job, index)
+	SaveToRedis(con, job, prefix, index)
 }
 
 func AddUser(w http.ResponseWriter, r *http.Request){
+	const prefix string = "USR"
 	pool := getRedisPool()
 	con := pool.Get()
 	defer con.Close()
 	var user User
-	_ = json.NewDecorder(r.Body).Decode(&user)
+	_ = json.NewDecoder(r.Body).Decode(&user)
 	index, err := SeqNextVal(con, "userseq")
 	LogError(err)
+	SaveToRedis(con, user, prefix, index)
 }
