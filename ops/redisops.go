@@ -76,7 +76,7 @@ func SeqNextVal(con redis.Conn, key string)(uint32, error){
 			return 6, err
 		}
 	}
-	seqval, err = redis.String(con.Do("INCR", key))
+	_, err = redis.String(con.Do("INCR", key))
 	seqval, err = redis.String(con.Do("GET", key))
 	seqvalu32, err := strconv.ParseUint(seqval, 10, 32)
 	return uint32(seqvalu32), nil
