@@ -43,8 +43,16 @@ func AddJob(w http.ResponseWriter, r *http.Request) {
 	var job Job
 	_ = json.NewDecoder(r.Body).Decode(&job)
 	index, err := SeqNextVal(con, "jobseq")
-	if err != nil {
-		fmt.Println("sequence error!")
-	}
+	LogError(err)
 	SaveToRedis(con, job, index)
+}
+
+func AddUser(w http.ResponseWriter, r *http.Request){
+	pool := getRedisPool()
+	con := pool.Get()
+	defer con.Close()
+	var user User
+	_ = json.NewDecorder(r.Body).Decode(&user)
+	index, err := SeqNextVal(con, "userseq")
+	LogError(err)
 }
