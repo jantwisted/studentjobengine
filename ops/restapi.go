@@ -3,6 +3,7 @@ package ops
 import(
 	"encoding/json"
 	"net/http"
+	orm "../orm"
 )
 
 func GetAllJobs(w http.ResponseWriter, r *http.Request) {
@@ -57,4 +58,11 @@ func AddUser(w http.ResponseWriter, r *http.Request){
 	index, err := SeqNextVal(con, "userseq")
 	LogError(err)
 	SaveToRedis(con, user, prefix, index)
+}
+
+func SelectAllJobs(w http.ResponseWriter, r *http.Request) {
+	db := orm.Connect_To_Database()
+	var job_array []orm.Job
+	job_array = orm.Get_All_Jobs(db)
+	json.NewEncoder(w).Encode(job_array)
 }
