@@ -33,9 +33,6 @@ func Get_All_Jobs(db *gorm.DB)([]Job){
 	if err != nil{
 		fmt.Println(err)
 	}
-	if err != nil{
-		fmt.Println(err)
-	}
 	return job
 }
 
@@ -45,6 +42,15 @@ func Search_Job_From_Idx(id int, db *gorm.DB)(Job){
 	if err != nil{
 		fmt.Println(err)
 	}	
+	return job
+}
+
+func Search_Job_From_Title(title string, db *gorm.DB)([]Job){
+	var job []Job
+	_, err := json.Marshal(db.Where("name LIKE ?", "%"+title+"%").Find(&job))
+	if err != nil{
+		fmt.Println(err)
+	}
 	return job
 }
 

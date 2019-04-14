@@ -20,3 +20,4 @@ $ ./bin/studentjobengine
 ### Tips
 
 ``curl -H "Content-Type: application/json" --data @sample.json 127.0.0.1:8080/jobs/add``
+``curl 127.0.0.1:8080/jobs | python -m json.tool``
