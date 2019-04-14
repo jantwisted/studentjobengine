@@ -47,7 +47,7 @@ func Search_Job_From_Idx(id int, db *gorm.DB)(Job){
 
 func Search_Job_From_Title(title string, db *gorm.DB)([]Job){
 	var job []Job
-	_, err := json.Marshal(db.Where("name LIKE ?", "%"+title+"%").Find(&job))
+	_, err := json.Marshal(db.Where("title LIKE ?", "%"+title+"%").Find(&job))
 	if err != nil{
 		fmt.Println(err)
 	}

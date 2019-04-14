@@ -50,3 +50,12 @@ func GetJobById(w http.ResponseWriter, r *http.Request){
 	job = orm.Search_Job_From_Idx(idx, db)
 	json.NewEncoder(w).Encode(job)
 }
+
+func GetJobByTitle(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	params := mux.Vars(r)
+	title := params["title"]
+	var job_array []orm.Job
+	job_array = orm.Search_Job_From_Title(title, db)
+	json.NewEncoder(w).Encode(job_array)
+}
