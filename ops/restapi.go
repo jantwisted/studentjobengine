@@ -10,17 +10,6 @@ import(
 
 
 
-func AddUser(w http.ResponseWriter, r *http.Request){
-	const prefix string = "USR"
-	pool := getRedisPool()
-	con := pool.Get()
-	defer con.Close()
-	var user User
-	_ = json.NewDecoder(r.Body).Decode(&user)
-	index, err := SeqNextVal(con, "userseq")
-	LogError(err)
-	SaveToRedis(con, user, prefix, index)
-}
 
 func SelectAllJobs(w http.ResponseWriter, r *http.Request) {
 	db := orm.Connect_To_Database()
