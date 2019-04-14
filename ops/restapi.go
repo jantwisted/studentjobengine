@@ -59,3 +59,11 @@ func GetJobByTitle(w http.ResponseWriter, r *http.Request){
 	job_array = orm.Search_Job_From_Title(title, db)
 	json.NewEncoder(w).Encode(job_array)
 }
+
+func DeleteJob(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	params := mux.Vars(r)
+	idx, err := strconv.Atoi(params["id"])
+	LogError(err)
+	orm.Delete_Job(idx, db)
+}

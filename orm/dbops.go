@@ -54,4 +54,9 @@ func Search_Job_From_Title(title string, db *gorm.DB)([]Job){
 	return job
 }
 
+func Delete_Job(id int, db *gorm.DB){
+	var job Job
+	db.Where("id = ?", id).Delete(&job)
+}
+
 // user specific operations
