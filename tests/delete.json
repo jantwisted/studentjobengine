@@ -1,0 +1,15 @@
+{
+    "Contact": "jan.kernel@gmail.com",
+    "CreatedAt": "2019-04-14T01:38:26.037215+02:00",
+    "DeletedAt": null,
+    "ID": 3,
+    "JobID": 3,
+    "Location": {
+        "JobID": 0,
+        "Latitude": "",
+        "Longtitude": ""
+    },
+    "Short_desc": "Second Job",
+    "Title": "Ada",
+    "UpdatedAt": "2019-04-14T01:38:26.037215+02:00"
+}
