@@ -9,7 +9,7 @@ import(
 )
 
 
-
+// jobs specific operations
 
 func SelectAllJobs(w http.ResponseWriter, r *http.Request) {
 	db := orm.Connect_To_Database()
@@ -56,3 +56,56 @@ func DeleteJob(w http.ResponseWriter, r *http.Request){
 	LogError(err)
 	orm.Delete_Job(idx, db)
 }
+
+// user specific operations
+
+func SelectAllUsers(w http.ResponseWriter, r *http.Request) {
+	db := orm.Connect_To_Database()
+	var user_array []orm.User
+	user_array = orm.Get_All_Users(db)
+	json.NewEncoder(w).Encode(user_array)
+}
+
+func InsertUser(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	var user orm.User
+	_ = json.NewDecoder(r.Body).Decode(&user)
+	orm.Insert_To_User(user, db)
+}
+
+func GetUserById(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	params := mux.Vars(r)
+	idx, err := strconv.Atoi(params["id"])
+	LogError(err)
+	var user orm.User
+	user = orm.Search_User_From_Idx(idx, db)
+	json.NewEncoder(w).Encode(user)
+}
+
+func GetUserByFirstName(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	params := mux.Vars(r)
+	first_name := params["first_name"]
+	var user_array []orm.User
+	user_array = orm.Search_User_From_First_Name(first_name, db)
+	json.NewEncoder(w).Encode(user_array)
+}
+
+func GetUserByUserName(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	params := mux.Vars(r)
+	user_name := params["user_name"]
+	var user orm.User
+	user = orm.Search_User_From_User_Name(user_name, db)
+	json.NewEncoder(w).Encode(user)
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	params := mux.Vars(r)
+	idx, err := strconv.Atoi(params["id"])
+	LogError(err)
+	orm.Delete_User(idx, db)
+}
+

@@ -60,3 +60,48 @@ func Delete_Job(id int, db *gorm.DB){
 }
 
 // user specific operations
+
+func Insert_To_User(user User, db *gorm.DB){
+	db.Create(&user)
+}
+
+func Get_All_Users(db *gorm.DB)([]User){
+	var user []User
+	_, err := json.Marshal(db.Find(&user))
+	if err != nil{
+		fmt.Println(err)
+	}
+	return user
+}
+
+func Search_User_From_Idx(id int, db *gorm.DB)(User){
+	var user User
+	_, err := json.Marshal(db.First(&user, id))
+	if err != nil{
+		fmt.Println(err)
+	}
+	return user
+}
+
+func Search_User_From_User_Name(user_name string, db *gorm.DB)(User){
+	var user User
+	_, err := json.Marshal(db.Where("user_name LIKE ?", "%"+user_name+"%").First(&user))
+	if err != nil{
+		fmt.Println(err)
+	}
+	return user
+}
+
+func Search_User_From_First_Name(first_name string, db *gorm.DB)([]User){
+	var user []User
+	_, err := json.Marshal(db.Where("title LIKE ?", "%"+first_name+"%").Find(&user))
+	if err != nil{
+		fmt.Println(err)
+	}
+	return user
+}
+
+func Delete_User(id int, db *gorm.DB){
+	var user User
+	db.Where("id = ?", id).Delete(&user)
+}
