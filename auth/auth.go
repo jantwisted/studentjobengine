@@ -1,61 +1,50 @@
 package auth
 
+
 import (
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"log"
-  "net/http"
-  "os"
-
+	"time"
+	"os"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-var mySigningKey = []byte("captainjacksparrowsayshi")
 
-
-func GetSigningKey() []byte{
-  return []byte(os.Getenv("SIGNON"))
+func PasswordHash(pwd []byte) string {
+    hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+    if err != nil {
+        log.Println(err)
+    }
+    return string(hash)
 }
 
 
-
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World")
-	fmt.Println("Endpoint Hit: homePage")
-
+func ComparePasswords(hashedPwd string, plainPwd []byte) bool {
+    byteHash := []byte(hashedPwd)
+    err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+    if err != nil {
+        log.Println(err)
+        return false
+    }
+    return true
 }
 
 
-func isAuthorized(endpoint func(http.ResponseWriter, *http.Request)) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func GenerateJWT(user_name string)(string, error){
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
 
-		if r.Header["Token"] != nil {
+	claims["authorized"] = true
+	claims["user"] = user_name
+	claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
+	signing_key := string(os.Getenv("SIGNKEY"))
+	tokenString, err := token.SignedString([]byte(signing_key))
 
-			token, err := jwt.Parse(r.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
-				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-					return nil, fmt.Errorf("There was an error")
-				}
-				return mySigningKey, nil
-			})
+	if err != nil{
+		fmt.Errorf("Something went wrong: %s", err.Error())
+		return "", err
+	}
 
-			if err != nil {
-				fmt.Fprintf(w, err.Error())
-			}
-
-			if token.Valid {
-				endpoint(w, r)
-			}
-		} else {
-
-			fmt.Fprintf(w, "Not Authorized")
-		}
-	})
+	return tokenString, nil
 }
-
-// func handleRequests() {
-// 	http.Handle("/", isAuthorized(homePage))
-// 	log.Fatal(http.ListenAndServe(":9000", nil))
-// }
-
-// func main() {
-// 	handleRequests()
-// }

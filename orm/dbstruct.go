@@ -30,6 +30,16 @@ type User struct{
 	FirstName string `gorm:"type:varchar(100)"`
 	LastName string `gorm:"type:varchar(100)"`
 	UserType string `gorm:"type:varchar(50)"`
+	Nick string `gorm:"type:varchar(50)"`
 	UserStatus int 
 }
 
+type UserLoginRequest struct{
+	UserName string
+	Password string
+}
+
+type UserLoginResponse struct{
+	UserName string
+	Token string
+}

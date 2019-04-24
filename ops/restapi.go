@@ -6,6 +6,7 @@ import(
 	"github.com/gorilla/mux"
 	"strconv"
 	orm "../orm"
+	auth "../auth"
 )
 
 
@@ -70,6 +71,7 @@ func InsertUser(w http.ResponseWriter, r *http.Request){
 	db := orm.Connect_To_Database()
 	var user orm.User
 	_ = json.NewDecoder(r.Body).Decode(&user)
+	user.Password = auth.PasswordHash([]byte(user.Password))
 	orm.Insert_To_User(user, db)
 }
 
@@ -109,3 +111,21 @@ func DeleteUser(w http.ResponseWriter, r *http.Request){
 	orm.Delete_User(idx, db)
 }
 
+func LogMeIn(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	var user_login_request orm.UserLoginRequest
+	var user_login_response orm.UserLoginResponse
+	_ = json.NewDecoder(r.Body).Decode(&user_login_request)
+	hashed_password_from_db := orm.GetPassword(user_login_request.UserName, db)
+	ismatch := auth.ComparePasswords(hashed_password_from_db, []byte(user_login_request.Password))
+	user_login_response.UserName = user_login_request.UserName
+	if ismatch {
+		token, err := auth.GenerateJWT(user_login_request.UserName)
+		user_login_response.Token = token
+		LogError(err)
+		json.NewEncoder(w).Encode(user_login_response)
+	} else {
+		user_login_response.Token = "failed!"
+		json.NewEncoder(w).Encode(user_login_response)
+	}
+}

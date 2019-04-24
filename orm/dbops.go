@@ -94,7 +94,7 @@ func Search_User_From_User_Name(user_name string, db *gorm.DB)(User){
 
 func Search_User_From_First_Name(first_name string, db *gorm.DB)([]User){
 	var user []User
-	_, err := json.Marshal(db.Where("title LIKE ?", "%"+first_name+"%").Find(&user))
+	_, err := json.Marshal(db.Where("first_name LIKE ?", "%"+first_name+"%").Find(&user))
 	if err != nil{
 		fmt.Println(err)
 	}
@@ -105,3 +105,10 @@ func Delete_User(id int, db *gorm.DB){
 	var user User
 	db.Where("id = ?", id).Delete(&user)
 }
+
+func GetPassword(user_name string, db *gorm.DB)(string){
+	user := Search_User_From_User_Name(user_name, db)
+	return user.Password
+}
+
+
