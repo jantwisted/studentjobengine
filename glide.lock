@@ -1,0 +1,90 @@
+hash: 5ea443abb905ddd1697a8e94b651e76e8393287dd9be1ca1e6b069afe0d177fd
+updated: 2019-04-27T00:57:58.97258306+02:00
+imports:
+- name: github.com/auth0/go-jwt-middleware
+  version: 5493cabe49f7bfa6e2ec444a09d334d90cd4e2bd
+- name: github.com/dgrijalva/jwt-go
+  version: 06ea1031745cb8b3dab3f6a236daf2b0aa468b7e
+- name: github.com/fsnotify/fsnotify
+  version: 1485a34d5d5723fea214f5710708e19a831720e4
+- name: github.com/gomodule/redigo
+  version: 9c11da706d9b7902c6da69c592f75637793fe121
+  subpackages:
+  - internal
+  - redis
+- name: github.com/gorilla/mux
+  version: c5c6c98bc25355028a63748a498942a6398ccd22
+- name: github.com/hashicorp/hcl
+  version: 65a6292f0157eff210d03ed1bf6c59b190b8b906
+  subpackages:
+  - hcl/ast
+  - hcl/parser
+  - hcl/printer
+  - hcl/scanner
+  - hcl/strconv
+  - hcl/token
+  - json/parser
+  - json/scanner
+  - json/token
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/jantwisted/studentjobengine
+  version: 905b4e5bd26cc7bb223549f447c42bf97a894752
+  subpackages:
+  - config
+  - version
+- name: github.com/jinzhu/gorm
+  version: e3987fd4b803c16497aa4dfd2e75db7a6a061a4e
+  subpackages:
+  - dialects/postgres
+- name: github.com/jinzhu/inflection
+  version: 04140366298a54a039076d798123ffa108fff46c
+- name: github.com/konsorten/go-windows-terminal-sequences
+  version: f55edac94c9bbba5d6182a4be46d86a2c9b5b50e
+- name: github.com/lib/pq
+  version: 51e2106eed1cea199c802d2a49e91e2491b02056
+  subpackages:
+  - hstore
+  - oid
+  - scram
+- name: github.com/magiconair/properties
+  version: 7757cc9fdb852f7579b24170bcacda2c7471bb6a
+- name: github.com/mitchellh/mapstructure
+  version: 3536a929edddb9a5b34bd6861dc4a9647cb459fe
+- name: github.com/pelletier/go-toml
+  version: 1d8903f1d0f31eba3a391755acc0efb0a4698653
+- name: github.com/Sirupsen/logrus
+  version: 9b3cdde74fbe9443d704467498a7dcb61a79de9b
+- name: github.com/spf13/afero
+  version: 588a75ec4f32903aa5e39a2619ba6a4631e28424
+  subpackages:
+  - mem
+- name: github.com/spf13/cast
+  version: 8c9545af88b134710ab1cd196795e7f2388358d7
+- name: github.com/spf13/cobra
+  version: ef82de70bb3f60c65fb8eebacbb2d122ef517385
+- name: github.com/spf13/jwalterweatherman
+  version: 94f6ae3ed3bceceafa716478c5fbf8d29ca601a1
+- name: github.com/spf13/pflag
+  version: 24fa6976df40757dce6aea913e7b81ade90530e1
+- name: github.com/spf13/viper
+  version: 9e56dacc08fbbf8c9ee2dbc717553c758ce42bc9
+- name: github.com/urfave/negroni
+  version: c6a59be0ce122566695fbd5e48a77f8f10c8a63a
+- name: golang.org/x/crypto
+  version: a29dc8fdc73485234dbef99ebedb95d2eced08de
+  subpackages:
+  - bcrypt
+  - blowfish
+- name: golang.org/x/sys
+  version: a129542de9ae0895210abff9c95d67a1f33cb93d
+  subpackages:
+  - unix
+- name: golang.org/x/text
+  version: 342b2e1fbaa52c93f31447ad2c6abc048c63e475
+  subpackages:
+  - transform
+  - unicode/norm
+- name: gopkg.in/yaml.v2
+  version: 51d6538a90f86fe93ac480b35f37b2be17fef232
+testImports: []
