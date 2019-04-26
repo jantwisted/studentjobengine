@@ -3,7 +3,7 @@ package main
 import (
 //	"./cmd"
 	"github.com/gorilla/mux"
-	"./ops"
+	"github.com/jantwisted/studentjobengine/ops"
 	jwt "github.com/dgrijalva/jwt-go"
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/urfave/negroni"

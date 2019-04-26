@@ -5,8 +5,8 @@ import(
 	"net/http"
 	"github.com/gorilla/mux"
 	"strconv"
-	orm "../orm"
-	auth "../auth"
+	orm "github.com/jantwisted/studentjobengine/orm"
+	auth "github.com/jantwisted/studentjobengine/auth"
 )
 
 
