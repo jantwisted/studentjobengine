@@ -6,12 +6,26 @@ a location based student jobs api
 
 This project requires Go to be installed. On OS X with Homebrew you can just run `brew install go`.
 
+## ENV
+
+Set the following environment variables
+
+```
+DBTYPE=<db type>
+DBHOST=<host>
+DBPORT=<port>
+DBNAME=<dbname>
+DBUSER=<user>
+DBPASSWD=<password>
+```
+
 Running it then should be as simple as:
 
 ```console
 $ make build
 $ ./bin/studentjobengine
 ```
+
 
 ### Testing
 
