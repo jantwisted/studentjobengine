@@ -41,5 +41,5 @@ type UserLoginRequest struct{
 
 type UserLoginResponse struct{
 	UserName string
-	Token string
+	JWT string
 }

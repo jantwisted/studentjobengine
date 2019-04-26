@@ -21,3 +21,9 @@ $ ./bin/studentjobengine
 
 * ``curl -H "Content-Type: application/json" --data @sample.json 127.0.0.1:8080/jobs/add``
 * ``curl 127.0.0.1:8080/jobs | python -m json.tool``
+
+### Login
+
+* ``curl -H "Content-Type: application/json" --data @user_login.json 127.0.0.1:8080/users/login |python -m json.tool``
+* ``export TOKEN=<JWT>``
+* ``curl -H "Authorization: Bearer $TOKEN" <url>``

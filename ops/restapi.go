@@ -121,11 +121,11 @@ func LogMeIn(w http.ResponseWriter, r *http.Request){
 	user_login_response.UserName = user_login_request.UserName
 	if ismatch {
 		token, err := auth.GenerateJWT(user_login_request.UserName)
-		user_login_response.Token = token
+		user_login_response.JWT = token
 		LogError(err)
 		json.NewEncoder(w).Encode(user_login_response)
 	} else {
-		user_login_response.Token = "failed!"
+		user_login_response.JWT = "failed!"
 		json.NewEncoder(w).Encode(user_login_response)
 	}
 }
