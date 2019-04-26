@@ -6,10 +6,18 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"fmt"
 	"encoding/json"
+	"os"
 )
 
+
 func Connect_To_Database() (*gorm.DB) {
-	db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=postgres dbname=sje password=postgres")
+	db_type := string(os.Getenv("DBTYPE"))
+	db_host := string(os.Getenv("DBHOST"))
+	db_port := string(os.Getenv("DBPORT"))
+	db_dbname := string(os.Getenv("DBNAME"))
+	db_user := string(os.Getenv("DBUSER"))
+	db_passwd := string(os.Getenv("DBPASSWD"))
+	db, err := gorm.Open(db_type, "host="+db_host+" port="+db_port+" user="+db_user+" dbname="+db_dbname+" password="+db_passwd)
 	if err != nil{
 		fmt.Println(err)
 	}
@@ -107,6 +115,7 @@ func Delete_User(id int, db *gorm.DB){
 }
 
 func GetPassword(user_name string, db *gorm.DB)(string){
+// this is a wrapper function for easy access
 	user := Search_User_From_User_Name(user_name, db)
 	return user.Password
 }

@@ -19,7 +19,7 @@ func SelectAllJobs(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(job_array)
 }
 
-func InitializeDatabase(w http.ResponseWriter, r *http.Request){
+func InitializeDatabase(){
 	db := orm.Connect_To_Database()
 	orm.Database_Migration(db)
 }

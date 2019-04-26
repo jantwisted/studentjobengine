@@ -14,6 +14,8 @@ import (
 
 
 func main() {
+
+	ops.InitializeDatabase()
     	//cmd.Execute()
 
 	router_noauth := mux.NewRouter()
