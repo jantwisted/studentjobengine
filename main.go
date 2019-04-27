@@ -42,7 +42,7 @@ func main() {
 	router_auth.HandleFunc("/users/{id}", ops.GetUserById).Methods("GET")
 	router_auth.HandleFunc("/users/firstname/{first_name}", ops.GetUserByFirstName).Methods("GET")
 	router_auth.HandleFunc("/users/username/{user_name}", ops.GetUserByUserName).Methods("GET")
-	router_auth.HandleFunc("/users/add", ops.InsertUser).Methods("POST")
+	router_noauth.HandleFunc("/users/add", ops.InsertUser).Methods("POST")
 	router_auth.HandleFunc("/users/delete/{id}", ops.DeleteUser).Methods("DELETE")
 	router_noauth.HandleFunc("/users/login", ops.LogMeIn).Methods("POST")
 
