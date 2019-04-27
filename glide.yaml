@@ -1,4 +1,4 @@
-package: .
+package: github.com/jantwisted/studentjobengine
 import:
 - package: github.com/Sirupsen/logrus
 - package: github.com/auth0/go-jwt-middleware
@@ -7,10 +7,6 @@ import:
   subpackages:
   - redis
 - package: github.com/gorilla/mux
-- package: github.com/jantwisted/studentjobengine
-  subpackages:
-  - config
-  - version
 - package: github.com/jinzhu/gorm
   subpackages:
   - dialects/postgres

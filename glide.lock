@@ -1,5 +1,5 @@
-hash: 5ea443abb905ddd1697a8e94b651e76e8393287dd9be1ca1e6b069afe0d177fd
-updated: 2019-04-27T00:57:58.97258306+02:00
+hash: 9bec0f9757131e1f41a9386b80dbece9b0b27ef55388e44e023293efc63e8aa4
+updated: 2019-04-27T02:16:14.833034527+02:00
 imports:
 - name: github.com/auth0/go-jwt-middleware
   version: 5493cabe49f7bfa6e2ec444a09d334d90cd4e2bd
@@ -28,11 +28,6 @@ imports:
   - json/token
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
-- name: github.com/jantwisted/studentjobengine
-  version: 905b4e5bd26cc7bb223549f447c42bf97a894752
-  subpackages:
-  - config
-  - version
 - name: github.com/jinzhu/gorm
   version: e3987fd4b803c16497aa4dfd2e75db7a6a061a4e
   subpackages:
