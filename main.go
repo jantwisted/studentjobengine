@@ -56,5 +56,6 @@ func main() {
 
 	negroni_instance := negroni.Classic()
 	negroni_instance.UseHandler(router_noauth)
-	negroni_instance.Run(":8080")
+	port_str := ":"+string(os.Getenv("PORT"))
+	negroni_instance.Run(port_str)
 }
