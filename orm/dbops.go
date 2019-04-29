@@ -25,7 +25,7 @@ func Connect_To_Database() (*gorm.DB) {
 }
 
 func Database_Migration(db *gorm.DB){
-	db.AutoMigrate(&Job{}, &Coordinates{}, &User{})
+	db.AutoMigrate(&Job{}, &User{})
 }
 
 
