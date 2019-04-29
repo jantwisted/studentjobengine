@@ -12,8 +12,8 @@ type Job struct{
 	JobID int `gorm:"primary_key;AUTO_INCREMENT"`
 	Title string  `gorm:"type:varchar(50);unique_index"`
 	Short_desc string `gorm:"type:varchar(200)`
-	Latitude `gorm:"type:varchar(50)"`
-	Longtitude `gorm:"type:varchar(50)"`
+	Latitude string `gorm:"type:varchar(50)"`
+	Longtitude string `gorm:"type:varchar(50)"`
 	Contact string `gorm:"type:varchar(100)"`
 }
 
