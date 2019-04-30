@@ -30,7 +30,7 @@ func main() {
 
 	// job operations
 
-	router_auth.HandleFunc("/jobs", ops.SelectAllJobs).Methods("GET")
+	router_auth.HandleFunc("/jobs/all", ops.SelectAllJobs).Methods("GET")
 	router_auth.HandleFunc("/jobs/{id}", ops.GetJobById).Methods("GET")
 	router_auth.HandleFunc("/jobs/title/{title}", ops.GetJobByTitle).Methods("GET")
 	router_auth.HandleFunc("/jobs/add", ops.InsertJob).Methods("POST")
@@ -53,6 +53,7 @@ func main() {
 
 	negroni_wrapper := negroni.New(negroni.HandlerFunc(jwtMiddleware.HandlerWithNext), negroni.Wrap(router_auth))
 	router_noauth.PathPrefix("/users").Handler(negroni_wrapper)
+	router_noauth.PathPrefix("/jobs").Handler(negroni_wrapper)
 
 	negroni_instance := negroni.Classic()
 	negroni_instance.UseHandler(router_noauth)
