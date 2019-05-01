@@ -6,6 +6,7 @@ import json
 import jwt
 
 app = Flask(__name__)
+api_url = 'https://studentjobengine.herokuapp.com'
  
 @app.route('/')
 def home():
@@ -21,7 +22,7 @@ def do_admin_login():
     user_password = request.form['password']
     user_details['UserName'] = user_name
     user_details['Password'] = user_password
-    url = 'http://127.0.0.1:8080/users/login'
+    url = api_url+'/users/login'
     body = user_details
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(body), headers=headers)
