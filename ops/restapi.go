@@ -58,6 +58,13 @@ func DeleteJob(w http.ResponseWriter, r *http.Request){
 	orm.Delete_Job(idx, db)
 }
 
+func SearchJobsFromDistance(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	var job_array []orm.Job
+	job_array = orm.GetJobsFromDistance(25, db)
+	json.NewEncoder(w).Encode(job_array)
+}
+
 // user specific operations
 
 func SelectAllUsers(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +137,4 @@ func LogMeIn(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func SearchJobsFromDistance(w http.ResponseWriter, r *http.Request){
-	db := orm.Connect_To_Database()
-	orm.GetJobsFromDistance(25, db)
-}
+
