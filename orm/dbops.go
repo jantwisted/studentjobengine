@@ -128,7 +128,7 @@ func GetJobsFromDistance(distance int, db *gorm.DB)([]Job){
 	db.Raw("SELECT X.id FROM ( SELECT id, ( 3959 * acos( cos( radians(47.085895) ) * cos( radians( cast(latitude as float) ) ) * cos( radians( cast(longtitude as float) ) - radians(17.900233) ) + sin( radians(47.085895) ) * sin( radians( cast(latitude as float) ) ) ) ) AS distance FROM jobs ) X WHERE X.distance < ? ORDER BY X.distance", distance).Scan(&result)
 	for i, r := range result {
 		job := Search_User_From_Idx(r.id, db)
-		fmt.Println(job.title)
+		fmt.Println(job.Title)
 	}
 }
 
