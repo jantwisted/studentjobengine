@@ -129,3 +129,8 @@ func LogMeIn(w http.ResponseWriter, r *http.Request){
 		json.NewEncoder(w).Encode(user_login_response)
 	}
 }
+
+func SearchJobsFromDistance(w http.ResponseWriter, r *http.Request){
+	db := orm.Connect_To_Database()
+	orm.GetJobsFromDistance(25, db)
+}

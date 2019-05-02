@@ -38,3 +38,7 @@ type UserLoginResponse struct{
 	UserName string
 	JWT string
 }
+
+type DistanceResult struct {
+    id  int
+}
