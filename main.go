@@ -30,7 +30,8 @@ func main() {
 
 	// job operations
 
-	router_auth.HandleFunc("/jobs/all", ops.SelectAllJobs).Methods("GET")
+	//router_auth.HandleFunc("/jobs/all", ops.SelectAllJobs).Methods("GET")
+	router_auth.HandleFunc("/jobs/all", ops.SearchJobsFromDistance).Methods("GET")
 	router_auth.HandleFunc("/jobs/{id}", ops.GetJobById).Methods("GET")
 	router_auth.HandleFunc("/jobs/title/{title}", ops.GetJobByTitle).Methods("GET")
 	router_auth.HandleFunc("/jobs/add", ops.InsertJob).Methods("POST")
