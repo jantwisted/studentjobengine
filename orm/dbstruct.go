@@ -39,6 +39,12 @@ type UserLoginResponse struct{
 	JWT string
 }
 
-type DistanceResult struct {
-    id  int
+type DistanceResult struct{
+	id  int
+	distance float32
+}
+
+type GeneralMsg struct{
+	action string
+	result string
 }
