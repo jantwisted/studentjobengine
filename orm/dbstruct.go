@@ -25,7 +25,7 @@ type User struct{
 	FirstName string `gorm:"type:varchar(100)"`
 	LastName string `gorm:"type:varchar(100)"`
 	UserType string `gorm:"type:varchar(50)"`
-	Nick string `gorm:"type:varchar(50)"`
+	Email string `gorm:"type:varchar(50)"`
 	UserStatus int 
 }
 
@@ -45,6 +45,6 @@ type DistanceResult struct{
 }
 
 type GeneralMsg struct{
-	action string
-	result string
+	Action string
+	Result string
 }

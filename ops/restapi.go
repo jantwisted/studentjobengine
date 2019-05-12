@@ -27,7 +27,6 @@ func InitializeDatabase(){
 func InsertJob(w http.ResponseWriter, r *http.Request){
 	var job orm.Job	
 	db := orm.Connect_To_Database()
-	var job orm.Job
 	_ = json.NewDecoder(r.Body).Decode(&job)
 	orm.Insert_To_Job(job, db)
 }
@@ -82,8 +81,8 @@ func InsertUser(w http.ResponseWriter, r *http.Request){
 	user.Password = auth.PasswordHash([]byte(user.Password))
 	orm.Insert_To_User(user, db)
 	var gm orm.GeneralMsg
-	gm.action = "register"
-	gm.result = "true"
+	gm.Action = "register"
+	gm.Result = "true"
 	json.NewEncoder(w).Encode(gm)
 }
 
