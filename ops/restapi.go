@@ -81,7 +81,7 @@ func InsertUser(w http.ResponseWriter, r *http.Request){
 	_ = json.NewDecoder(r.Body).Decode(&user)
 	user.Password = auth.PasswordHash([]byte(user.Password))
 	orm.Insert_To_User(user, db)
-	var gm = orm.GeneralMsg
+	var gm orm.GeneralMsg
 	gm.action = "register"
 	gm.result = "true"
 	json.NewEncoder(w).Encode(gm)
